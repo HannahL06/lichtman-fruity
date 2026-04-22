@@ -1,4 +1,4 @@
 package lichtman.fruity.unsplash;
 
-public record URLS(String small) {
+public record Urls(String small) {
 }
