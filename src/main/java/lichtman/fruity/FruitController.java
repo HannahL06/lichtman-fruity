@@ -55,6 +55,7 @@ public class FruitController {
                 .subscribe(
                         (response) -> handleResponse(response),
                         Throwable::printStackTrace);
+
     }
 
     public void handleResponse(Fruit fruit) {
