@@ -154,8 +154,8 @@ public class FruitFrame extends JFrame {
         constraints.gridy = 8;
         add(proteinInfo, constraints);
     }
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         FruitFrame frame = new FruitFrame();
         frame.setVisible(true);
     }
