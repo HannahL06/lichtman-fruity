@@ -18,14 +18,14 @@ public class FruitFrame extends JFrame {
         JButton searchButton = new JButton("Search");
         JLabel picLabel = new JLabel();
 
-        JLabel familyLabel = new JLabel("Family: ");
-        JLabel orderLabel = new JLabel("Order: ");
-        JLabel genusLabel = new JLabel("Genus: ");
-        JLabel caloriesLabel = new JLabel("Calories: ");
-        JLabel fatLabel = new JLabel("Fat: ");
-        JLabel sugarLabel = new JLabel("Sugar: ");
-        JLabel carbsLabel = new JLabel("Carbs: ");
-        JLabel proteinLabel = new JLabel("Proteins: ");
+        final JLabel familyLabel = new JLabel("Family: ");
+        final JLabel orderLabel = new JLabel("Order: ");
+        final JLabel genusLabel = new JLabel("Genus: ");
+        final JLabel caloriesLabel = new JLabel("Calories: ");
+        final JLabel fatLabel = new JLabel("Fat: ");
+        final JLabel sugarLabel = new JLabel("Sugar: ");
+        final JLabel carbsLabel = new JLabel("Carbs: ");
+        final JLabel proteinLabel = new JLabel("Proteins: ");
 
         JLabel familyInfo = new JLabel("");
         JLabel orderInfo = new JLabel("");
@@ -34,7 +34,7 @@ public class FruitFrame extends JFrame {
         JLabel fatInfo = new JLabel("");
         JLabel sugarInfo = new JLabel("");
         JLabel carbsInfo = new JLabel("");
-        JLabel proteinInfo= new JLabel("");
+        JLabel proteinInfo = new JLabel("");
 
         FruitController fController = new FruitController(
                 service, picLabel,
@@ -155,6 +155,7 @@ public class FruitFrame extends JFrame {
         add(proteinInfo, constraints);
     }
     public static void main(String[] args) {
+
         FruitFrame frame = new FruitFrame();
         frame.setVisible(true);
     }
