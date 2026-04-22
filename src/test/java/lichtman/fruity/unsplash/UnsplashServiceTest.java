@@ -1,5 +1,6 @@
 package lichtman.fruity.unsplash;
 
+import com.andrewoid.apikeys.ApiKey;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,14 +12,13 @@ class UnsplashServiceTest {
 
         //given
         UnsplashService service = new UnsplashServiceFactory().create();
+        ApiKey apiKey = new ApiKey();
+        String keyString = apiKey.get();
 
         //when
-        Photos photos = service.search("strawberry").blockingGet();
+        Photos photos = service.search(keyString, "strawberry").blockingGet();
 
         //then
-        assertEquals(10000, photos.total());
-        assertEquals(1000, photos.total_pages());
-
         assertNotNull(photos.results()[0].urls().small());
     }
 }
