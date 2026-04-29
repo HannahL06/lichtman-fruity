@@ -1,5 +1,8 @@
 package lichtman.fruity;
 
+import lichtman.fruity.unsplash.UnsplashService;
+import lichtman.fruity.unsplash.UnsplashServiceFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +15,8 @@ public class FruitFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         setLayout(new GridBagLayout());
-        FruityService service = new FruityServiceFactory().create();
+        FruityService fruityService = new FruityServiceFactory().create();
+        UnsplashService unsplashService = new UnsplashServiceFactory().create();
 
         JTextField searchField = new JTextField("strawberry");
         JButton searchButton = new JButton("Search");
@@ -37,7 +41,7 @@ public class FruitFrame extends JFrame {
         JLabel proteinInfo = new JLabel("");
 
         FruitController fController = new FruitController(
-                service, picLabel,
+                fruityService, unsplashService, picLabel,
                 familyInfo, orderInfo, genusInfo,
                 caloriesInfo, fatInfo, sugarInfo,
                 carbsInfo, proteinInfo
@@ -67,9 +71,11 @@ public class FruitFrame extends JFrame {
         constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.gridheight = 8;
-        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridheight = 10;
         constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
         add(picLabel, constraints);
 
         // fruit info column pairs
