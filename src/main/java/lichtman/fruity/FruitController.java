@@ -1,26 +1,32 @@
 package lichtman.fruity;
 
+import com.andrewoid.apikeys.ApiKey;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import lichtman.fruity.unsplash.Photos;
+import lichtman.fruity.unsplash.UnsplashService;
+import lichtman.fruity.unsplash.UnsplashServiceFactory;
 
 import javax.swing.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class FruitController {
-    private FruityService service;
-    private JLabel picLabel;
-    private JLabel familyInfo;
-    private JLabel orderInfo;
-    private JLabel genusInfo;
-    private JLabel caloriesInfo;
-    private JLabel fatInfo;
-    private JLabel sugarInfo;
-    private JLabel carbsInfo;
-    private JLabel proteinInfo;
+    private final FruityService fruityService;
+    private final UnsplashService unsplashService;
+    private final JLabel picLabel;
+    private final JLabel familyInfo;
+    private final JLabel orderInfo;
+    private final JLabel genusInfo;
+    private final JLabel caloriesInfo;
+    private final JLabel fatInfo;
+    private final JLabel sugarInfo;
+    private final JLabel carbsInfo;
+    private final JLabel proteinInfo;
 
     public FruitController(
-            FruityService service,
+            FruityService fruityService,
+            UnsplashService unsplashService,
             JLabel picLabel,
             JLabel familyInfo,
             JLabel orderInfo,
@@ -31,7 +37,8 @@ public class FruitController {
             JLabel carbsInfo,
             JLabel proteinInfo
     ) {
-        this.service = service;
+        this.fruityService = fruityService;
+        this.unsplashService = unsplashService;
         this.picLabel = picLabel;
         this.familyInfo = familyInfo;
         this.orderInfo = orderInfo;
@@ -46,18 +53,31 @@ public class FruitController {
 
     public void fruitInfo(String fruitName) {
 
-        Disposable disposable = service.getFruit(fruitName)
+        Disposable fDisposable = fruityService.getFruit(fruitName)
                 // tells Rx to request the data on a background Thread
                 .subscribeOn(Schedulers.io())
                 // tells Rx to handle the response on Swing's main Thread
                 .observeOn(Schedulers.from(SwingUtilities::invokeLater))
                 //.observeOn(AndroidSchedulers.mainThread()) // Instead use this on Android only
                 .subscribe(
-                        (response) -> handleResponse(response),
+                        (fruit) -> handleFruitResponse(fruit),
                         Throwable::printStackTrace);
+
+        ApiKey apiKey = new ApiKey();
+        String keyString = apiKey.get();
+        Disposable uDisposable = unsplashService.search(keyString, fruitName)
+                // tells Rx to request the data on a background Thread
+                .subscribeOn(Schedulers.io())
+                // tells Rx to handle the response on Swing's main Thread
+                .observeOn(Schedulers.from(SwingUtilities::invokeLater))
+                //.observeOn(AndroidSchedulers.mainThread()) // Instead use this on Android only
+                .subscribe(
+                        (image) -> handleImageResponse(image),
+                        Throwable::printStackTrace);
+
     }
 
-    public void handleResponse(Fruit fruit) {
+    public void handleFruitResponse(Fruit fruit) {
         familyInfo.setText(fruit.family());
         orderInfo.setText(fruit.order());
         genusInfo.setText(fruit.genus());
@@ -69,12 +89,14 @@ public class FruitController {
         carbsInfo.setText(String.valueOf(nutritions.carbohydrates()));
         proteinInfo.setText(String.valueOf(nutritions.protein()));
 
+    }
+
+    public void handleImageResponse(Photos image) {
         try {
-            ImageIcon imageIcon = new ImageIcon(new URL("https://picsum.photos/800/600"));
+            ImageIcon imageIcon = new ImageIcon(new URL(image.results()[0].urls().small()));
             picLabel.setIcon(imageIcon);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
     }
 }
